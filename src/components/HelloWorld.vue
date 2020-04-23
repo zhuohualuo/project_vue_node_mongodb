@@ -1,59 +1,86 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+
+  <div>
+    <input type="text" placeholder="请输入" v-model="inputValue">
+    <span class="ml20">{{divValue}}</span>
+  </div>
+<hr>
+    <Button  type="primary" @click="sendValue">发送</Button >
+    <Button  type="primary" class="ml25" @click="getValue">获取</Button >
+    <van-popup v-model="show">{{popupValue}}</van-popup>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import { Popup, Button} from 'vant';
+import 'vant/lib/button/style';
+Vue.use(Button);
+Vue.use(Popup);
+
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+  },
+  data:()=> {
+    return {
+      inputValue: '',
+      divValue:'',
+      show:false,
+      popupValue:''
+    }
+  },
+  methods:{
+    sendValue() {
+      console.log('sendValue');
+
+      
+      let params={
+        name:this.inputValue
+      }
+      this.$axios.post('/a',params).then(res=>{
+        console.log(123,res);
+        if(res.data.code === 0) {
+          this.show = true;
+          this.popupValue = res.data.msg
+        }
+        
+      })
+      
+    },
+    getValue() {
+      console.log('getValue');
+      
+      this.$axios.get('/b').then(res=>{
+        console.log('res',res);
+        if(res.data.code===0) {
+          this.divValue = res.data.data
+        }
+        
+      })
+      
+    },
+    
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.ml20{
+  margin-left: 20px;
+  background: pink;
+  height: 30px;
+  border: 1px solid red;
+  box-shadow: 5px 5px 10px gray;
+  padding: 5px;
+  box-sizing: border-box;
+
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+.ml25 {
+  margin-left: 25px;
 }
 </style>
