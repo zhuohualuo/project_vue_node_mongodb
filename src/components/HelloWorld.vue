@@ -7,8 +7,8 @@
     <span class="ml20">{{divValue}}</span>
   </div>
 <hr>
-    <Button  type="primary" @click="sendValue">发送</Button >
-    <Button  type="primary" class="ml25" @click="getValue">获取</Button >
+    <van-button  type="primary" @click="sendValue">发送</van-button >
+    <van-button  type="primary" class="ml25" @click="getValue">获取</van-button >
     <van-popup v-model="show">{{popupValue}}</van-popup>
   </div>
 </template>
@@ -16,9 +16,9 @@
 <script>
 import Vue from 'vue'
 import { Popup, Button} from 'vant';
-import 'vant/lib/button/style';
 Vue.use(Button);
 Vue.use(Popup);
+import 'vant/lib/button/style';
 
 export default {
   name: 'HelloWorld',
