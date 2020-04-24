@@ -14,6 +14,51 @@ const mondb = [{
     }
 ]
 
+//建库
+
+var MongoClient = require('mongodb').MongoClient;
+MongoClient.connect('mongodb://localhost:27017/runoob', { useNewUrlParser: true }, function(err, db) {
+    if (err) throw err;
+    console.log('数据库已创建');
+    var dbase = db.db("runoob");
+    dbase.createCollection('site', function(err, res) {
+        if (err) throw err;
+        console.log("创建集合!");
+        db.close();
+    });
+});
+
+//建表
+MongoClient.connect("mongodb://localhost:27017/", { useNewUrlParser: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("runoob");
+    var myobj = { name: "菜鸟教程", url: "www.runoob" };
+    dbo.collection("site").insertOne(myobj, function(err, res) {
+        if (err) throw err;
+        console.log("文档插入成功");
+        db.close();
+    });
+});
+
+//查数据
+
+MongoClient.connect("mongodb://localhost:27017/", { useNewUrlParser: true }, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("runoob");
+    dbo.collection("site").find({}).toArray(function(err, result) { // 返回集合中所有数据
+        if (err) throw err;
+        console.log(result);
+        app.get('/getMon', (req, res) => {
+            res.json({
+                code: 0,
+                msg: result
+            })
+        })
+        db.close();
+    });
+});
+
+
 
 //使用中间件实现跨域请求
 app.use((req, res, next) => {

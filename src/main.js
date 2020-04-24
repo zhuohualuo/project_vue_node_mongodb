@@ -7,6 +7,7 @@ import store from './store'
 // import 'vant/lib/index.css';
 // Vue.use(Vant);
 
+import 'amfe-flexible/index.js'
 
 import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:3000';
